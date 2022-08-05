@@ -1,0 +1,12 @@
+li > button {
+    padding-left: 10px;
+    margin-left: 10px;
+}
+
+.isporuceno {
+    font-weight: bold;
+}
+
+.neisporuceno {
+    font-style: italic;
+}
