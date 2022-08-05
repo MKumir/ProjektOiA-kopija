@@ -1,6 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 
 const isporuke = [
     {
@@ -29,4 +30,12 @@ const isporuke = [
     }
 ]
 
-ReactDOM.render(<App isporuke={isporuke}/>,document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App isporuke={isporuke}/>
+  </React.StrictMode>
+);
+
+
+//ReactDOM.render(<App isporuke={isporuke}/>,document.getElementById('root'))

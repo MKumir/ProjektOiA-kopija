@@ -7,9 +7,9 @@ const Isporuka = ({isporuka, promjenaStatusa, brisiIsporuku}) => {
 
     return (
         <li>
-            <span className={isporuka.status ? 'isporuceno' : 'neisporuceno'}>{isporuka.proizvod}: {isporuka.kolicina} </span>
+            <span className={isporuka.status ? 'isporuceno' : 'neisporuceno'}>{isporuka.proizvod}: {isporuka.kolicina}, {isporuka.sektor} </span>
             <button onClick={promjenaStatusa}>{oznaka}</button>
-            <button onClick={brisiIsporuku}><span role="img" aria-label="delete">Brisi</span></button>
+            <button onClick={brisiIsporuku}>Brisi</button>
         </li>
     )
 }

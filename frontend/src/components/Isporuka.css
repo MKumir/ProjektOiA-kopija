@@ -4,9 +4,9 @@ li > button {
 }
 
 .isporuceno {
-    font-weight: bold;
+    color: blue;
 }
 
 .neisporuceno {
-    font-style: italic;
+    color: red;
 }

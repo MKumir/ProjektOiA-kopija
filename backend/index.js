@@ -1,22 +1,8 @@
-const express = require('express')
-const app = express()
-
-app.use(express.json())
-
-const zathjevInfo = (req, res, next) => {
-    console.log('Metoda: ', req.method)
-    console.log('Putanja: ', req.path)
-    console.log('Tijelo: ', req.body)
-    console.log('---')
-    next()
-}
-
-app.use(zathjevInfo)
 
 let isporuke = [
     {
       id: 1,
-      proizvod: 'Banane',
+      proizvod: 'Lubenice',
       kolicina: 5,
       datum: new Date(),
       sektor: 'A',
@@ -40,12 +26,46 @@ let isporuke = [
     }
 ]
 
+const express = require('express')
+const cors = require('cors')
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+
+const zathjevInfo = (req, res, next) => {
+    console.log('Metoda: ', req.method)
+    console.log('Putanja: ', req.path)
+    console.log('Tijelo: ', req.body)
+    console.log('---')
+    next()
+}
+app.use(zathjevInfo)
+
 app.get('/', (req, res) => {
     res.send('<h1>Pozdrav od Express servera!</h1>')
 })
 
 app.get('/api/isporuke', (req, res) => {
     res.json(isporuke)
+})
+
+
+app.get('/api/isporuke/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const isporuka = isporuke.find(i => i.id === id)
+    if (isporuka){
+        res.json(isporuka)
+    } else {
+        res.status(404).end()
+    }
+})
+
+app.delete('/api/isporuke/:id', (req,res) => {
+    const id = Number(req.params.id)
+    console.log('Brisem isporuku sa ID: ', id)
+    isporuke = isporuke.filter(i => i.id !== id)
+    res.status(204).end()
 })
 
 app.post('/api/isporuke', (req, res) => {
@@ -55,13 +75,6 @@ app.post('/api/isporuke', (req, res) => {
         return res.status(400).json({
             error: 'Nedostaje sadrzaj isporuke'
         })
-    }
-
-    const generirajId = () => {
-        const maxId = isporuke.length > 0
-        ? Math.max(...isporuke.map(p => p.id))
-        : 0
-        return maxId + 1
     }
 
     const isporuka = {
@@ -77,22 +90,22 @@ app.post('/api/isporuke', (req, res) => {
     res.json(isporuka)
 })
 
-app.get('/api/isporuke/:id', (req, res) => {
+app.put('/api/isporuke/:id', (req, res) => {
+    
+    const podatak = req.body
     const id = Number(req.params.id)
-    const isporuka = isporuke.find(i => i.id === id)
-    if (isporuka){
-        res.json(isporuka)
-    } else {
-        res.status(404).end()
-    }
+    console.log('Promjena vaznosti isporuke sa ID', id)
+    isporuke = isporuke.map(i => i.id !== id ? i : podatak)
+    console.log(isporuke)
+    res.json(podatak)
 })
 
-app.delete('/api/isporuke/:id', (req,res) => {
-    const id = Number(req.params.id)
-    isporuke = isporuke.filter(i => i.id !== id)
-    res.status(204).end()
-})
-
+const generirajId = () => {
+    const maxId = isporuke.length > 0
+    ? Math.max(...isporuke.map(p => p.id))
+    : 0
+    return maxId + 1
+}
 
 
 const PORT = 3001
