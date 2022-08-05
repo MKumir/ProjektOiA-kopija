@@ -27,6 +27,6 @@ const isporuke = [
         sektor: 'C',
         status: false
     }
-  ]
+]
 
 ReactDOM.render(<App isporuke={isporuke}/>,document.getElementById('root'))
