@@ -6,7 +6,7 @@ const App = (props) => {
 
   const [isporuke, postaviIsporuke] = useState([])
   const [unosProizvoda, postaviUnosProizvoda] = useState("Unesi proizvod...")
-  const [unosKolicine, postaviUnosKolicine] = useState("Unesi kolicinu...")
+  const [unosKolicine, postaviUnosKolicine] = useState(0)
   const [unosSektora, postaviUnosSektora] = useState("A")
   const [unosStatusa, postaviUnosStatusa] = useState(false)
   const [ispisSve, postaviIspis] = useState(true)
@@ -25,7 +25,7 @@ const App = (props) => {
 
     isporukeAkcije.osvjezi(id, modIsporuka)
       .then(res => {
-        console.log(res)
+        console.log(res.data)
         postaviIsporuke(isporuke.map(i => i.id !== id ? i : res.data))
       })
   }
@@ -66,7 +66,7 @@ const App = (props) => {
     .then(res => {
       postaviIsporuke(isporuke.concat(res.data))
       postaviUnosProizvoda('Unesi proizvod...')
-      postaviUnosKolicine('Unesi kolicinu...')
+      postaviUnosKolicine(0)
       postaviUnosSektora('A')
       postaviUnosStatusa(false)
     })
@@ -80,7 +80,7 @@ const App = (props) => {
   }
   const promjenaUnosaKolicine = (e) => {
     //console.log(e.target.value)
-    postaviUnosKolicine(e.target.value)
+    postaviUnosKolicine(Number(e.target.value))
   }
   const promjenaUnosaSektora = (e) => {
     //console.log(e.target.value)
@@ -114,7 +114,7 @@ const App = (props) => {
           </thead>
           <tbody>
             {isporukeZaIspis.map(i =>
-              <Isporuka key={i.id} isporuka={i} 
+              <Isporuka key={i.id} isporuka={i}
                 promjenaStatusa={() => promjenaStatusaIsporuke(i.id)}
                 brisiIsporuku={() => brisiIsporuku(i.id)}
               />
@@ -125,7 +125,7 @@ const App = (props) => {
       <h2>Unesi Isporuku: </h2>
       <form onSubmit={novaIsporuka}>
           <div>Proizvod: <input value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
-          <div>Kolicina: <input value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>
+          <div>Kolicina: <input type="number" value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>
           <div>Sektor: 
             <select value={unosSektora} onChange={promjenaUnosaSektora}>
               <option value="A">A</option>

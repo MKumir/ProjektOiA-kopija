@@ -10,8 +10,8 @@ const Isporuka = ({isporuka, promjenaStatusa, brisiIsporuku}) => {
             <td>{isporuka.proizvod}</td>
             <td>{isporuka.kolicina}</td>
             <td>{isporuka.sektor}</td>
-            <button onClick={promjenaStatusa}>{oznaka}</button>
-            <button onClick={brisiIsporuku}>Brisi</button>
+            <td><button onClick={promjenaStatusa}>{oznaka}</button></td>
+            <td><button onClick={brisiIsporuku}>Brisi</button></td>
         </tr>
     )
 }
