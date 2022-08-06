@@ -107,7 +107,6 @@ const generirajId = () => {
     return maxId + 1
 }
 
-
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Posluzitelj je pokrenut na portu ${PORT}`);

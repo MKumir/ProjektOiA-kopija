@@ -103,14 +103,25 @@ const App = (props) => {
           Prikaži { ispisSve ? "isporučene" : "sve"}
         </button>
       </div>
-      <ul>
-        {isporukeZaIspis.map(i =>
-          <Isporuka key={i.id} isporuka={i} 
-            promjenaStatusa={() => promjenaStatusaIsporuke(i.id)}
-            brisiIsporuku={() => brisiIsporuku(i.id)}
-          />
-        )}
-      </ul>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>PROIZVOD</th>
+              <th>KOLICINA</th>
+              <th>SEKTOR</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isporukeZaIspis.map(i =>
+              <Isporuka key={i.id} isporuka={i} 
+                promjenaStatusa={() => promjenaStatusaIsporuke(i.id)}
+                brisiIsporuku={() => brisiIsporuku(i.id)}
+              />
+            )}
+          </tbody>
+        </table>
+      </div>
       <h2>Unesi Isporuku: </h2>
       <form onSubmit={novaIsporuka}>
           <div>Proizvod: <input value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>

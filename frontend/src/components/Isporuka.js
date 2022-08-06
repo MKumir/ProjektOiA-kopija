@@ -6,11 +6,13 @@ const Isporuka = ({isporuka, promjenaStatusa, brisiIsporuku}) => {
     ? 'označi kao neisporučeno' : 'označi kao isporučeno'
 
     return (
-        <li>
-            <span className={isporuka.status ? 'isporuceno' : 'neisporuceno'}>{isporuka.proizvod}: {isporuka.kolicina}, {isporuka.sektor} </span>
+        <tr className={isporuka.status ? 'isporuceno' : 'neisporuceno'}>
+            <td>{isporuka.proizvod}</td>
+            <td>{isporuka.kolicina}</td>
+            <td>{isporuka.sektor}</td>
             <button onClick={promjenaStatusa}>{oznaka}</button>
             <button onClick={brisiIsporuku}>Brisi</button>
-        </li>
+        </tr>
     )
 }
 

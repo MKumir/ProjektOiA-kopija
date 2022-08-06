@@ -3,6 +3,20 @@ li > button {
     margin-left: 10px;
 }
 
+tr {
+    text-align: center;
+    background-color: rgb(225, 229, 244);
+    
+}
+
+button{
+    background-color: white;
+    font-size: 14px;
+    padding: 7px;
+    border-color:lightblue;
+    border-radius: 10px;
+}
+
 .isporuceno {
     color: blue;
 }
