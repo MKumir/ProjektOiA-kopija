@@ -24,3 +24,10 @@ Pocetak | Kraj
 ### Kratki opis promjena
 Definirani zahtjevi aplikacije.
 Dovršena prva faza projekta.
+
+## 06.08.2022.
+Pocetak | Kraj
+------- | ----
+20:00   | 21:36
+### Kratki opis promjena
+
