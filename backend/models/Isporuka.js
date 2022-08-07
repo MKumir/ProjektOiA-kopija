@@ -1,16 +1,21 @@
 const mongoose = require('mongoose')
 
-const user = process.env.ATLAS_USER
-const password = process.env.ATLAS_PASS
-const dbname = 'isporuke-api'
-const url = `mongodb+srv://${user}:${password}@cluster0.xbqgsl2.mongodb.net/${dbname}?retryWrites=true&w=majority`
- 
 const isporukaSchema = new mongoose.Schema({
-    proizvod: String,
-    kolicina: Number,
+    proizvod: {
+        type: String,
+        minLength: 2,
+        required: true
+    },
+    kolicina: {
+        type: Number,
+        min: 1
+    },
     sektor: String,
     datum: Date,
-    status: Boolean
+    status: {
+        type: Boolean,
+        default: false
+    }
 })
 
 isporukaSchema.set('toJSON', {
@@ -23,15 +28,5 @@ isporukaSchema.set('toJSON', {
 })
 
 const Isporuka = mongoose.model('Isporuka', isporukaSchema, 'isporuke')
-
-console.log('Spajamo se na bazu')
-
-mongoose.connect(url)
-    .then(res => {
-        console.log('Spojeni smo na bazu')
-    })
-    .catch(err => {
-        console.log('Greška pri spajanju', err.message)
-    })
 
 module.exports = Isporuka

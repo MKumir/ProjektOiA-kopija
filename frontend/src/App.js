@@ -65,14 +65,12 @@ const App = (props) => {
     isporukeAkcije.stvori(noviObjekt)
     .then(res => {
       postaviIsporuke(isporuke.concat(res.data))
-      postaviUnosProizvoda('Unesi proizvod...')
-      postaviUnosKolicine(0)
-      postaviUnosSektora('A')
-      postaviUnosStatusa(false)
     })
+    postaviUnosProizvoda('Unesi proizvod...')
+    postaviUnosKolicine(0)
+    postaviUnosSektora('A')
+    postaviUnosStatusa(false)
   }
-
-  
 
   const promjenaUnosaProizvoda = (e) => {
     //console.log(e.target.value)
