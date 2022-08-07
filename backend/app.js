@@ -1,6 +1,7 @@
 const config = require('./utils/config')
 const express = require('express')
 const app = express()
+require('express-async-errors')
 const cors = require('cors')
 const isporukeRouter = require('./controllers/isporuke')
 const middleware = require('./utils/middleware')

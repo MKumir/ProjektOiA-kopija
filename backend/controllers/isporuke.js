@@ -1,10 +1,9 @@
 const isporukeRouter = require('express').Router()
 const Isporuka = require('../models/Isporuka')
 
-isporukeRouter.get('/', (req, res) => {
-    Isporuka.find({}).then(rezultat =>{
-        res.json(rezultat)
-    })
+isporukeRouter.get('/', async (req, res) => {
+    const isporuke = await Isporuka.find({})
+    res.json(isporuke)
 })
 
 isporukeRouter.get('/:id', (req, res, next) => {
@@ -28,16 +27,10 @@ isporukeRouter.delete('/:id', (req,res) => {
     .catch(err => next(err))
 })
 
-isporukeRouter.post('/', (req, res, next) => {
+isporukeRouter.post('/', async (req, res, next) => {
     const podatak = req.body
 
-    // if(!podatak.proizvod || podatak.kolicina <=0 || !podatak.sektor){
-    //     return res.status(400).json({
-    //         error: 'Neispravni podaci isporuke'
-    //     })
-    // }
-
-    const novaIsporuka = new Isporuka({
+    const isporuka = new Isporuka({
         proizvod: podatak.proizvod,
         kolicina: podatak.kolicina,
         sektor: podatak.sektor,
@@ -45,12 +38,8 @@ isporukeRouter.post('/', (req, res, next) => {
         status: podatak.status || false
     })
 
-    //isporuke = isporuke.concat(isporuka)
-    novaIsporuka.save()
-    .then(spremljenaIsporuka => {
-        res.json(spremljenaIsporuka)
-    })
-    .catch(err => next(err))
+    const spremljenaIsporuka = await isporuka.save()
+    res.json(spremljenaIsporuka)
     
 })
 
