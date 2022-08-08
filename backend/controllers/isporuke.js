@@ -1,6 +1,15 @@
 const isporukeRouter = require('express').Router()
 const Isporuka = require('../models/Isporuka')
 const Korisnik = require('../models/Korisnik')
+const jwt = require('jsonwebtoken')
+
+const dohvatiToken = (req) => {
+    const auth = req.get('authorization')
+    if (auth && auth.toLowerCase().startsWith('bearer')) {
+        return auth.substring(7)
+    }
+    return null
+}
 
 isporukeRouter.get('/', async (req, res) => {
     const isporuke = await Isporuka.find({})
@@ -32,7 +41,14 @@ isporukeRouter.delete('/:id', (req,res) => {
 
 isporukeRouter.post('/', async (req, res, next) => {
     const podatak = req.body
-    const korisnik = await Korisnik.findById(podatak.korisnikId)
+    const token = dohvatiToken(req)
+
+    const dekToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !dekToken.id){
+        return res.status(401).json({error: "Neispravni token"})
+    }
+
+    const korisnik = await Korisnik.findById(dekToken.id)
 
     const isporuka = new Isporuka({
         proizvod: podatak.proizvod,
@@ -42,7 +58,6 @@ isporukeRouter.post('/', async (req, res, next) => {
         status: podatak.status || false,
         korisnik: korisnik._id
     })
-
 
     const spremljenaIsporuka = await isporuka.save()
     korisnik.isporuke = korisnik.isporuke.concat(spremljenaIsporuka._id)

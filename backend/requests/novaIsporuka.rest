@@ -6,5 +6,5 @@ Content-Type: application/json
     "kolicina": 10,
     "sektor": "A",
     "status": true,
-    "korisnikId": "62f03e15aef7b3a038483dbb"
+    "korisnikId": "62f14718456d8ef153ba73a2"
 }

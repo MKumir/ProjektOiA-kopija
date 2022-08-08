@@ -104,6 +104,21 @@ describe('Testovi za POST', () => {
         const isporuke = await pomocni.isporukeIzBaze()
         expect(isporuke).toHaveLength(pomocni.pocetneIsporuke.length)
     })
+
+    test('Dodavanje isporuke bez tokena', async () => {
+        const novaIsporuka = {
+            kolicina: 10,
+            sektor: 'TestSektor',
+            status: true
+        }
+        await api 
+        .post('/api/isporuke')
+        .send(novaIsporuka)
+        .expect(401)
+    
+        const isporukeNaKraju = await pomocni.isporukeIzBaze()
+        expect(isporukeNaKraju).toHaveLength(pomocni.pocetneIsporuke.length)
+    })
 })
 
 describe('Testovi za DELETE', () => {

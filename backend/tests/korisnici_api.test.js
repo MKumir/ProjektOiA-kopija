@@ -27,7 +27,7 @@ describe('Kada imamo samo jednog korisnika u bazi', () => {
         const korisnik = {
             ime: 'Pero',
             prezime: 'Peric',
-            uloga: 'radnik',
+            uloga: 'poslovoda',
             username: 'pperic',
             pass: 'tajna'
         }

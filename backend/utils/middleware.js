@@ -19,6 +19,8 @@ const errorHandler = (err, req, res, next) => {
         return res.status(400).send({error: 'Krivi format ID-a'})
     } else if (err.name === 'ValidationError'){
         return res.status(400).send({error: err.message})
+    } else if (err.name === 'JsonWebTokenError'){
+        return res.status(401).send({error: "Neispravni token"})
     }
     next(err)
 }
