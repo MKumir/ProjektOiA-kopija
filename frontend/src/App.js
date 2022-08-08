@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Isporuka from './components/Isporuka';
 import isporukeAkcije from './services/isporuke'
+import loginAkcije from './services/login'
 
 const App = (props) => {
 
@@ -10,6 +11,29 @@ const App = (props) => {
   const [unosSektora, postaviUnosSektora] = useState("A")
   const [unosStatusa, postaviUnosStatusa] = useState(false)
   const [ispisSve, postaviIspis] = useState(true)
+
+  const [username, postaviUsername] = useState('')
+  const [pass, postaviPass] = useState('')
+
+  const [korisnik, postaviKorisnika] = useState(null)
+
+  const userLogin = async (e) => {
+    e.preventDefault()
+    try {
+        const korisnik = await loginAkcije.prijava({
+        username, pass
+      })
+      postaviKorisnika(korisnik)
+      isporukeAkcije.postaviToken(korisnik.token)
+      window.localStorage.setItem('prijavljeniKorisnik', JSON.stringify(korisnik))
+      console.log(korisnik)
+      postaviUsername('')
+      postaviPass('')
+    } catch (exception) {
+      alert('Neispravni podaci')
+    }
+    //console.log('Prijava', username, pass)
+  }
 
   const isporukeZaIspis = ispisSve
     ? isporuke
@@ -44,6 +68,15 @@ const App = (props) => {
     .then(res => {
       console.log(res.data)
       postaviIsporuke(res.data)})
+  }, [])
+
+  useEffect( () => {
+    const logiraniKorisnikJSON = window.localStorage.getItem('prijavljeniKorisnik')
+    if (logiraniKorisnikJSON) {
+      const korisnik = JSON.parse(logiraniKorisnikJSON)
+      postaviKorisnika(korisnik)
+      isporukeAkcije.postaviToken(korisnik.token)
+    }
   }, [])
  
 
@@ -86,16 +119,69 @@ const App = (props) => {
   }
   const promjenaUnosaStatusa = (e) => {
     //console.log(e.target.value)
-    if (e.target.value) {
-      postaviUnosStatusa(true)
-    } else {
-      postaviUnosStatusa(false)
-    }
+    postaviUnosStatusa(e.target.value)
   }
+
+  const loginForma = () => (
+    <form onSubmit={userLogin}>
+        <div>
+          Korisničko ime:
+          <input type="text" value={username} name="Username"
+            onChange={ (event) => postaviUsername(event.target.value)} />
+        </div>
+        <div>
+          Lozinka:
+          <input type="password" value={pass} name="Pass"
+            onChange={ ({ target }) => postaviPass(target.value)} />
+        </div>
+        <button type="submit">Prijava</button>
+      </form>
+  )
+
+  const isporukaForma = () => (
+    <form onSubmit={novaIsporuka}>
+          <div>Proizvod: <input value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
+          <div>Kolicina: <input type="number" value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>
+          <div>Sektor: 
+            <select value={unosSektora} onChange={promjenaUnosaSektora}>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+          <div>Status: 
+            <select value={unosStatusa} onChange={promjenaUnosaStatusa}>
+              <option value={false}>Neisporuceno</option>
+              <option value={true}>Isporuceno</option>
+            </select>
+          </div>
+          <button type="submit">Spremi</button>
+      </form>
+  )
+
+  const odjavaKorisnika = () => {
+    window.localStorage.clear()
+    postaviKorisnika(null)
+  }
+
 
   return (
     <div>
       <h1>Isporuke</h1>
+      {korisnik === null
+        ? loginForma()
+        : <div>
+            <p>Uloga: {korisnik.uloga}</p>
+            <p>Prijavljeni ste kao: {korisnik.ime} {korisnik.prezime}</p>
+            <button onClick={() => odjavaKorisnika()}>Odjavi se</button>
+            <h2>Unesi Isporuku:</h2>
+            {isporukaForma()}
+          </div>
+          
+      }
       <div>
         <button onClick={() => postaviIspis(!ispisSve)}>
           Prikaži { ispisSve ? "isporučene" : "sve"}
@@ -120,28 +206,6 @@ const App = (props) => {
           </tbody>
         </table>
       </div>
-      <h2>Unesi Isporuku: </h2>
-      <form onSubmit={novaIsporuka}>
-          <div>Proizvod: <input value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
-          <div>Kolicina: <input type="number" value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>
-          <div>Sektor: 
-            <select value={unosSektora} onChange={promjenaUnosaSektora}>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="E">E</option>
-              <option value="F">F</option>
-            </select>
-          </div>
-          <div>Status: 
-            <select value={unosStatusa} onChange={promjenaUnosaStatusa}>
-              <option value={false}>Neisporuceno</option>
-              <option value={true}>Isporuceno</option>
-            </select>
-          </div>
-          <button type="submit">Spremi</button>
-      </form>
     </div>
   );
 }
