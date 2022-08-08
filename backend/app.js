@@ -4,6 +4,7 @@ const app = express()
 require('express-async-errors')
 const cors = require('cors')
 const isporukeRouter = require('./controllers/isporuke')
+const korisniciRouter = require('./controllers/korisnici')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/isporuke', isporukeRouter)
+app.use('/api/korisnici', korisniciRouter)
 
 app.use(middleware.nepoznataRuta)
 app.use(middleware.errorHandler)

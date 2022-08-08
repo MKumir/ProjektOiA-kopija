@@ -1,8 +1,8 @@
 const Isporuka = require('../models/Isporuka')
+const Korisnik = require('../models/Korisnik')
 
 const pocetneIsporuke = [
     {
-        id: 1,
         proizvod: 'Prvi testni proizvod',
         kolicina: 10,
         sektor: 'A',
@@ -10,7 +10,6 @@ const pocetneIsporuke = [
         status: true
     },
     {
-        id: 2,
         proizvod: 'Drugi testni proizvod',
         kolicina: 20,
         sektor: 'B',
@@ -24,6 +23,11 @@ const isporukeIzBaze = async () => {
     return isporuke.map(i => i.toJSON())
 }
 
+const korisniciIzBaze = async () => {
+    const korisnici = await Korisnik.find({})
+    return korisnici.map(k => k.toJSON())
+}
+
 module.exports = {
-    pocetneIsporuke, isporukeIzBaze
+    pocetneIsporuke, isporukeIzBaze, korisniciIzBaze
 }

@@ -15,6 +15,10 @@ const isporukaSchema = new mongoose.Schema({
     status: {
         type: Boolean,
         default: false
+    },
+    korisnik: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Korisnik'
     }
 })
 
