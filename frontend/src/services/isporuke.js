@@ -27,8 +27,10 @@ const osvjezi = (id, noviObjekt) => {
 }
 
 const brisi = (id) => {
-    // DODAJ TOKEN
-    return axios.delete(`${osnovniUrl}/${id}`)
+    const config = {
+        headers: {Authorization: token}
+    }
+    return axios.delete(`${osnovniUrl}/${id}`, config)
 }
 
 const isporukeAkcije = {

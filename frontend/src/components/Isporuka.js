@@ -13,6 +13,7 @@ const Isporuka = ({isporuka, promjenaStatusa, brisiIsporuku}) => {
             <td><button onClick={promjenaStatusa}>{oznaka}</button></td>
             <td><button onClick={brisiIsporuku}>Brisi</button></td>
         </tr>
+ 
     )
 }
 
