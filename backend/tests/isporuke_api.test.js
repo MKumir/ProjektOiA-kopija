@@ -61,6 +61,7 @@ describe('Testovi za POST', () => {
             sektor: 'TestSektor',
             status: true
         }
+
     
         await api
         .post('/api/isporuke')
@@ -125,14 +126,14 @@ describe('Testovi za DELETE', () => {
     test('Ispravno brisanje isporuke', async () => {
         const isporukePocetak = await pomocni.isporukeIzBaze()
         const isporukaZaBrisanje = isporukePocetak[0]
-      
+        
         await api
           .delete(`/api/isporuke/${isporukaZaBrisanje.id}`)
           .expect(204)
-      
+        
         const isporukeKraj = await pomocni.isporukeIzBaze()
         expect(isporukeKraj).toHaveLength(isporukePocetak.length - 1)
-      
+        
         const proizvodi = isporukeKraj.map(i => i.proizvod)
         expect(proizvodi).not.toContain(isporukaZaBrisanje.proizvod)
       })
@@ -142,3 +143,4 @@ describe('Testovi za DELETE', () => {
 afterAll(() => {
     mongoose.connection.close()
 })
+

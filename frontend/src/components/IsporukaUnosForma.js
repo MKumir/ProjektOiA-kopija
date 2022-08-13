@@ -1,10 +1,26 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import isporukeAkcije from '../services/isporuke'
+import proizvodiAkcije from '../services/proizvodi'
 
-const IsporukaForma = (props) => {
+const IsporukaUnosForma = (props) => {
+    const [isporuke, postaviIsporuke] = useState([])
+    const [proizvodi, postaviProizvode] = useState([])
     const [unosProizvoda, postaviUnosProizvoda] = useState("Unesi proizvod...")
     const [unosKolicine, postaviUnosKolicine] = useState(0)
     const [unosSektora, postaviUnosSektora] = useState("A")
     const [unosStatusa, postaviUnosStatusa] = useState(false)
+
+    const filtriranaLista = proizvodi.filter((el) => {
+        //ako nema inputa returnaj original
+        if (unosProizvoda === '') {
+            return el;
+        }
+        //returnaj proizvod ciji naziv sadrzi input
+        else {
+            return el.naziv.toLowerCase().includes(unosProizvoda)
+        }
+        
+    })
 
     const promjenaUnosaProizvoda = (e) => {
         postaviUnosProizvoda(e.target.value)
@@ -21,27 +37,39 @@ const IsporukaForma = (props) => {
 
     const novaIsporuka = (e) =>{
         e.preventDefault()
-        props.spremiIsporuku({
+        const noviObjekt = {
         proizvod: unosProizvoda,
         kolicina: unosKolicine,
         sektor: unosSektora,
         status: unosStatusa
-    })
-        // isporukeAkcije.stvori(noviObjekt)
-        // .then(res => {
-        //   postaviIsporuke(isporuke.concat(res.data))
-        // }) --> u glavnoj komponenti app
+        }
+        isporukeAkcije.stvori(noviObjekt).then(res => {
+        postaviIsporuke(isporuke.concat(res.data))
+        })
+        window.location.reload(0)
         postaviUnosProizvoda('Unesi proizvod...')
         postaviUnosKolicine(0)
         postaviUnosSektora('A')
         postaviUnosStatusa(false)
     }
 
+    useEffect( () => {
+        proizvodiAkcije.dohvatiSve().then(res => {
+            console.log(res.data)
+            postaviProizvode(res.data)})
+    }, [])
+
+
     return (
     <div className='isporukaFormaDiv'>
         <h2>Unesi Isporuku:</h2>
         <form onSubmit={novaIsporuka}>
-            <div>Proizvod: <input value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
+            <div>Proizvod: <input type="search" value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
+            <ul>
+            {filtriranaLista.map((pr) => (
+                <button key={pr.naziv} className="prButton" value={pr.naziv} onClick={promjenaUnosaProizvoda}>{pr.naziv}</button>
+            ))}
+            </ul>
             <div>Kolicina: <input type="number" value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>
             <div>Sektor: 
                 <select value={unosSektora} onChange={promjenaUnosaSektora}>
@@ -65,4 +93,4 @@ const IsporukaForma = (props) => {
     )
 }
 
-export default IsporukaForma;
+export default IsporukaUnosForma;

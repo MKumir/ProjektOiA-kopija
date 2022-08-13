@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 
 const isporukaSchema = new mongoose.Schema({
     proizvod: {
-        type: String,
-        minLength: 2,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Proizvod'
     },
     kolicina: {
         type: Number,

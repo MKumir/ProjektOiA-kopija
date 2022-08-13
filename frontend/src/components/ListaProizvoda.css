@@ -1,0 +1,9 @@
+.prButton {
+    padding-left: 10px;
+    margin-left: 10px;
+    background-color: white;
+    font-size: 12px;
+    padding: 7px;
+    border-color:red;
+    border-radius: 10px;
+}

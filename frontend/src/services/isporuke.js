@@ -21,9 +21,13 @@ const stvori = async (noviObjekt) => {
     return odgovor
 }
 
-const osvjezi = (id, noviObjekt) => {
+const osvjezi = async (id, noviObjekt) => {
     // DODAJ TOKEN
-    return axios.put(`${osnovniUrl}/${id}`, noviObjekt)
+    const config = {
+        headers: {Authorization: token}
+    } 
+    const odgovor = await axios.put(`${osnovniUrl}/${id}`, noviObjekt, config)
+    return odgovor
 }
 
 const brisi = (id) => {
@@ -42,3 +46,4 @@ const isporukeAkcije = {
 }
 
 export default isporukeAkcije;
+

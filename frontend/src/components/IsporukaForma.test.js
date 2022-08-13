@@ -1,13 +1,13 @@
 import React from "react";
 import '@testing-library/jest-dom/extend-expect'
 import {render, fireEvent} from '@testing-library/react'
-import IsporukaForma from "./IsporukaForma";
+import IsporukaUnosForma from "./IsporukaUnosForma";
 
 test('<IsporukaForma> poziva onSubmit i mijenja stanje roditelja', () => {
     const stvoriIsporuku = jest.fn()
 
     const komponenta = render (
-        <IsporukaForma spremiIsporuku={stvoriIsporuku} />
+        <IsporukaUnosForma spremiIsporuku={stvoriIsporuku} />
     )
 
     const inputProizvod = komponenta.container.querySelector('input')
