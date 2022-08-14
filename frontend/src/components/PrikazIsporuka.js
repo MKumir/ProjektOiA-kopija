@@ -39,6 +39,8 @@ const PrikazIsporuka = () => {
             postaviIsporuke(res.data)})        
     }, [])
 
+    
+
     return (
         <div>
             <button onClick={() => postaviIspis(!ispisSve)}>

@@ -5,25 +5,26 @@ import proizvodiAkcije from '../services/proizvodi'
 const IsporukaUnosForma = (props) => {
     const [isporuke, postaviIsporuke] = useState([])
     const [proizvodi, postaviProizvode] = useState([])
-    const [unosProizvoda, postaviUnosProizvoda] = useState("Unesi proizvod...")
+    const [unosProizvoda, postaviUnosProizvoda] = useState("")
+    const [visible, setVisible] = useState(false)
     const [unosKolicine, postaviUnosKolicine] = useState(0)
     const [unosSektora, postaviUnosSektora] = useState("A")
     const [unosStatusa, postaviUnosStatusa] = useState(false)
 
     const filtriranaLista = proizvodi.filter((el) => {
-        //ako nema inputa returnaj original
+        //ako nema inputa returnaj null
         if (unosProizvoda === '') {
-            return el;
+            return 'null';
         }
         //returnaj proizvod ciji naziv sadrzi input
-        else {
-            return el.naziv.toLowerCase().includes(unosProizvoda)
-        }
+        
+        return el.naziv.toLowerCase().includes(unosProizvoda)
         
     })
-
+    
     const promjenaUnosaProizvoda = (e) => {
         postaviUnosProizvoda(e.target.value)
+        console.log(e.target.value)
     }
     const promjenaUnosaKolicine = (e) => {
         postaviUnosKolicine(Number(e.target.value))
@@ -34,6 +35,9 @@ const IsporukaUnosForma = (props) => {
     const promjenaUnosaStatusa = (e) => {
         postaviUnosStatusa(e.target.value)
     }
+    const promjenaVidljivostiPr = () => {
+        setVisible(true)
+    }
 
     const novaIsporuka = (e) =>{
         e.preventDefault()
@@ -43,15 +47,20 @@ const IsporukaUnosForma = (props) => {
         sektor: unosSektora,
         status: unosStatusa
         }
+        if(!(unosProizvoda === '' || unosKolicine <= 1)){
+            window.location.reload(null)
+        }
         isporukeAkcije.stvori(noviObjekt).then(res => {
         postaviIsporuke(isporuke.concat(res.data))
         })
-        window.location.reload(0)
-        postaviUnosProizvoda('Unesi proizvod...')
+        postaviUnosProizvoda('')
         postaviUnosKolicine(0)
         postaviUnosSektora('A')
         postaviUnosStatusa(false)
+        
     }
+
+ 
 
     useEffect( () => {
         proizvodiAkcije.dohvatiSve().then(res => {
@@ -64,10 +73,18 @@ const IsporukaUnosForma = (props) => {
     <div className='isporukaFormaDiv'>
         <h2>Unesi Isporuku:</h2>
         <form onSubmit={novaIsporuka}>
-            <div>Proizvod: <input type="search" value={unosProizvoda} onChange={promjenaUnosaProizvoda}/></div>
+            <div>Proizvod: 
+                <input 
+                    type="search" 
+                    placeholder="Unesi proizvod..." 
+                    value={unosProizvoda}  
+                    onChange={promjenaUnosaProizvoda}
+                    onClick={promjenaVidljivostiPr}
+                    />
+            </div>
             <ul>
             {filtriranaLista.map((pr) => (
-                <button key={pr.naziv} className="prButton" value={pr.naziv} onClick={promjenaUnosaProizvoda}>{pr.naziv}</button>
+                <button style={{display: visible ? 'inline-block': 'none'}} key={pr.naziv} className="prButton" value={pr.naziv} onClick={promjenaUnosaProizvoda}>{pr.naziv}</button>
             ))}
             </ul>
             <div>Kolicina: <input type="number" value={unosKolicine} onChange={promjenaUnosaKolicine}/></div>

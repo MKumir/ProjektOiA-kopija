@@ -5,6 +5,7 @@ const Proizvod = require('../models/Proizvod')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
+
 const dohvatiToken = (req) => {
     const auth = req.get('authorization')
     if (auth && auth.toLowerCase().startsWith('bearer')) {
@@ -16,9 +17,9 @@ const dohvatiToken = (req) => {
 isporukeRouter.get('/', async (req, res) => {
     const isporuke = await Isporuka.find({})
     .populate('korisnik', { ime: 1, prezime: 1, uloga: 1})
- 
+    .populate('proizvod', { naziv: 1, kategorija: 1})
     
-
+    
     res.json(isporuke)
 })
 
@@ -26,6 +27,8 @@ isporukeRouter.get('/:id', async (req, res, next) => {
 
     const isporuka = await Isporuka.findById(req.params.id)
     .populate('korisnik', { ime: 1, prezime: 1, uloga: 1})
+    .populate('proizvod', { naziv: 1, kategorija: 1})
+    
 
     res.json(isporuka)
 })
@@ -65,9 +68,11 @@ isporukeRouter.post('/', async (req, res, next) => {
     }
 
     const korisnik = await Korisnik.findById(dekToken.id)
+    const proizvod = await Proizvod.findOne({naziv: podatak.proizvod})
+   
 
     const isporuka = new Isporuka({
-        proizvod: podatak.proizvod,
+        proizvod: proizvod._id,
         kolicina: podatak.kolicina,
         sektor: podatak.sektor,
         datum: new Date(),
@@ -81,7 +86,13 @@ isporukeRouter.post('/', async (req, res, next) => {
     await korisnik.save()
     await proizvod.save()
 
-    res.json(spremljenaIsporuka)
+    console.log(res)
+    
+    if(spremljenaIsporuka)
+        res.json(spremljenaIsporuka)
+    else
+        res.status(400).send({message: "Neispravan unos"})
+
     
 })
 
@@ -95,30 +106,32 @@ isporukeRouter.put('/:id', async (req, res) => {
     if (!token || !dekToken.id){
         return res.status(401).json({error: "Neispravni token"})
     }
+
     console.log('ID KORISNIKA', dekToken.id)
 
-    const isporuka = {
-        proizvod: podatak.proizvod,
+
+    const podaci = {
         kolicina: podatak.kolicina,
         sektor: podatak.sektor,
         status: podatak.status,
     }
 
 
-    const rez = await Isporuka
+    const isporuka = await Isporuka
     .findOneAndUpdate
     (
     {
         _id: mongoose.Types.ObjectId(req.params.id),
-        korisnik: mongoose.Types.ObjectId(dekToken.id)
+        proizvod: mongoose.Types.ObjectId(podatak.proizvod['id']),
+        korisnik: mongoose.Types.ObjectId(dekToken.id),
     },
-    isporuka,
+    podaci,
     {new: true}
-    )
+    )    
     
-    console.log(rez)
-    if(rez)
-        res.send(rez)
+    console.log(res)
+    if(isporuka)
+        res.send(isporuka)
     else
         res.status(204).send({message: "Ne postoji traženi podatak" })
 })

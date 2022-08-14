@@ -21,7 +21,9 @@ const errorHandler = (err, req, res, next) => {
         return res.status(400).send({error: err.message})
     } else if (err.name === 'JsonWebTokenError'){
         return res.status(401).send({error: "Neispravni token"})
-    }
+    } else if (err.name === 'TypeError'){
+        return res.status(400).send({error: "Neispravan unos"})
+    } 
     next(err)
 }
 
